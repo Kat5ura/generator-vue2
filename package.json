@@ -3,7 +3,11 @@
   "version": "0.0.3",
   "description": "This is a generator for vue2+vuex+vueRouter+mockjs",
   "keywords": [
-    "yeoman-generator"
+    "yeoman-generator",
+    "framework",
+    "front-end",
+    "app",
+    "vue"
   ],
   "dependencies": {
     "gulp-snippet-injector": "0.0.7",
@@ -11,8 +15,8 @@
     "yeoman-generator": "^0.24.1"
   },
   "files": [
-    "generators/app",
-    "generators/view"
+    "app",
+    "view"
   ],
   "author": "Kat5ura@github.com",
   "license": "MIT",
