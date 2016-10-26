@@ -9,5 +9,9 @@ export default [
     component: function (resolve) {
       require(['../views/<%= componentName%>/<%= componentName%>.vue'], resolve)
     }
-  }
+  },
+
+  /* inject start */
+
+  /* inject end */
 ]

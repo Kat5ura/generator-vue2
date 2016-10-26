@@ -11,20 +11,10 @@ module.exports = generators.Base.extend({
     constructor: function () {
         // Calling the super constructor is important so our generator is correctly set up
         generators.Base.apply(this, arguments)
-
-        this.getPlugins = function (dir) {
-            return fs.readdirSync(dir).filter(function (file) {
-                return fs.statSync(path.normalize(dir + '/' + file)).isDirectory()
-            })
-        }
     },
 
     initializing: function () {
-        this.configDist = this.config.get('dist')
-
-        this.distPath = this.destinationPath(this.configDist)
-
-        this.topLv = !!this.configDist
+        this.distPath = this.destinationPath()
         console.log('准备创建一个 view:')
     },
 
@@ -41,16 +31,9 @@ module.exports = generators.Base.extend({
                 name: 'pathName',
                 message: '请指定 path 名(请使用驼峰形式): ',
                 default: 'defaultPath' // Default to current folder name
-            },
+            }
         ]
-        if (this.topLv) {
-            questions.unshift({
-                type: 'list',
-                name: 'pluginName',
-                message: '请选择要添加 view 的插件: ',
-                choices: this.getPlugins(this.distPath)
-            })
-        }
+
         return this.prompt(questions).then(function (answers) {
             var pluginName = answers.pluginName
 
@@ -63,7 +46,7 @@ module.exports = generators.Base.extend({
             this.viewVuexName = _.camelCase(this.viewName)
 
             this.pathName = answers.pathName
-            var target = path.normalize(this.configDist + '/' + pluginName + '/src')
+            var target = path.normalize('src')
             this.viewTarget = target + '/views'
             this.vuexTarget = target + '/vuex/modules'
             this.routerTarget = target + '/config/routers.js'
@@ -114,7 +97,7 @@ module.exports = generators.Base.extend({
             var routers = []
             fs.readdirSync(this.destinationPath(this.viewTarget)).forEach(function (file) {
                 if (fs.statSync(path.normalize(this.destinationPath(this.viewTarget) + '/' + file)).isDirectory()){
-                    var router = {}, camelName = _.camelCase(file)
+                    var camelName = _.camelCase(file),
                     router = '{ path: "/' + camelName + '",'
                             + 'name: "' + camelName + '",'
                         + 'component: function (resolve) {require(["../views/' + file +'/'+ file +'.vue"], resolve)}}'
