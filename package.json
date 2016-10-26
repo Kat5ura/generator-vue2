@@ -15,6 +15,7 @@
     "yeoman-generator": "^0.24.1"
   },
   "files": [
+    "generators",
     "generators/app",
     "generators/view"
   ],
