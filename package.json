@@ -1,0 +1,19 @@
+{
+  "name": "generator-vue2",
+  "version": "0.0.1",
+  "description": "This is a generator for vue2+vuex+vueRouter+mockjs",
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "dependencies": {
+    "gulp-snippet-injector": "0.0.7",
+    "lodash": "^4.16.3",
+    "yeoman-generator": "^0.24.1"
+  },
+  "files": [
+    "generators/app",
+    "generators/view"
+  ],
+  "author": "Kat5ura@github.com",
+  "license": "MIT"
+}
