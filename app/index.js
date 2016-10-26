@@ -10,51 +10,36 @@ module.exports = generators.Base.extend({
     constructor: function () {
         // Calling the super constructor is important so our generator is correctly set up
         generators.Base.apply(this, arguments)
-
-        this.getPlugins = function (dir) {
-            return fs.readdirSync(dir).filter(function (file) {
-                return fs.statSync(path.normalize(dir + '/' + file)).isDirectory()
-            })
-        }
     },
 
     initializing: function () {
-        this.distPath = this.config.get('dist')
+        this.distPath = path.basename(process.cwd())
         var distPlugins = this.destinationPath(this.distPath)
         this.plugins = this.getPlugins(distPlugins)
-        console.log(this.plugins)
-        console.log('准备创建一个插件:')
+        console.log('Ready to create a vue2 project...')
     },
 
     prompting: function () {
         return this.prompt([{
             type: 'input',
-            name: 'plugin',
-            message: '请指定插件名(请使用驼峰形式): ',
-            default: 'defaultPlugin' // Default to current folder name
+            name: 'name',
+            message: 'Please type in the name of your app: ',
+            default: 'app' // Default to current folder name
         }, {
             type: 'input',
             name: 'description',
-            message: '请输入该插件的简要描述: ',
-            default: 'This is a default plugin.' // Default to current folder name
+            message: 'Description: ',
+            default: 'This is a vue2 app.' // Default to current folder name
         }]).then(function (answers) {
-            var pluginName = answers.plugin
+            var appName = answers.name
 
-            var componentName = _.startCase(pluginName).replace('\ ', '')
+            var componentName = _.startCase(appName).replace('\ ', '')
 
             this.componentName = componentName
             this.dirName = _.snakeCase(componentName)
             this.vuexName = _.camelCase(componentName)
             this.description = answers.description
 
-            var distPlugins = this.plugins,
-                dirName = this.dirName
-
-            if (dirName.indexOf(distPlugins) === -1) {
-                distPlugins.push(dirName)
-            } else {
-                console.log('已存在同名的插件,请重新输入...')
-            }
         }.bind(this))
     },
 
