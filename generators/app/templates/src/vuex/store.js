@@ -9,7 +9,9 @@ import actions from './actions'
 import plugins from './plugins'
 
 // 引入不同页面自由的 module
+/* inject:import start */
 import <%= componentName%> from './modules/<%= vuexName%>'
+/* inject:import end */
 
 Vue.use(Vuex)
 
@@ -25,6 +27,8 @@ export default new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
   plugins,
   modules: {
+    /* inject start */
     <%= vuexName%>: <%= componentName%>
+    /* inject end */
   }
 })

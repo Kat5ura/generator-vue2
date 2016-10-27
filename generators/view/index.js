@@ -11,11 +11,53 @@ module.exports = generators.Base.extend({
     constructor: function () {
         // Calling the super constructor is important so our generator is correctly set up
         generators.Base.apply(this, arguments)
+        this.updateRouter = function () {
+            var routers = []
+            fs.readdirSync(this.destinationPath(this.viewTarget)).forEach(function (file) {
+                if (fs.statSync(path.normalize(this.destinationPath(this.viewTarget) + '/' + file)).isDirectory()){
+                    var camelName = _.camelCase(file),
+                        router = '{ path: "/' + camelName + '",'
+                            + 'name: "' + camelName + '",'
+                            + 'component: function (resolve) {require(["../views/' + file +'/'+ file +'.vue"], resolve)}}'
+
+                    routers.push(router)
+                }
+            }.bind(this))
+
+            inject(this.destinationPath(this.routerTarget), {
+                code: routers.join(',\n')
+            })
+
+        }
+        
+        this.updateVuex = function () {
+            var modules = [], importors = []
+            fs.readdirSync(this.destinationPath(this.viewTarget)).forEach(function (file) {
+                if (fs.statSync(path.normalize(this.destinationPath(this.viewTarget) + '/' + file)).isDirectory()){
+                    var camelName = _.camelCase(file),
+                        module = camelName + ': ' + file,
+                        importor = 'import ' + file + ' from "./modules/'+ camelName +'"'
+
+                    modules.push(module)
+                    importors.push(importor)
+                }
+            }.bind(this))
+
+            inject(this.destinationPath(this.storeTarget), [{
+                code: modules.join(',\n')
+            }, {
+                code: importors.join('\n'),
+                type: 'import'
+            }])
+
+
+        }
+
     },
 
     initializing: function () {
         this.distPath = this.destinationPath()
-        console.log('准备创建一个 view:')
+        this.log('准备创建一个 view:')
     },
 
     prompting: function () {
@@ -35,12 +77,6 @@ module.exports = generators.Base.extend({
         ]
 
         return this.prompt(questions).then(function (answers) {
-            var pluginName = answers.pluginName
-
-            var componentName = _.startCase(pluginName).replace('\ ', '')
-
-            this.componentName = componentName
-            this.dirName = _.snakeCase(componentName)
 
             this.viewName = _.startCase(answers.viewName).replace('\ ', '')
             this.viewVuexName = _.camelCase(this.viewName)
@@ -50,6 +86,8 @@ module.exports = generators.Base.extend({
             this.viewTarget = target + '/views'
             this.vuexTarget = target + '/vuex/modules'
             this.routerTarget = target + '/config/routers.js'
+            this.componentTarget = target + '/components'
+            this.storeTarget = target + '/vuex/store.js'
 
         }.bind(this))
     },
@@ -69,8 +107,8 @@ module.exports = generators.Base.extend({
                 this.templatePath('views/Index/Index.vue'),
                 this.destinationPath(this.viewTarget + '/' + this.viewName + '/' + this.viewName + '.vue'),
                 {
-                    componentName: this.componentName,
-                    vuexName: this.viewVuexName
+                    viewName: this.viewName,
+                    viewVuexName: this.viewVuexName
                 }
             )
 
@@ -78,8 +116,8 @@ module.exports = generators.Base.extend({
                 this.templatePath('views/Index/types.js'),
                 this.destinationPath(this.viewTarget + '/' + this.viewName + '/types.js'),
                 {
-                    componentName: this.componentName,
-                    vuexName: this.viewVuexName
+                    viewName: this.viewName,
+                    viewVuexName: this.viewVuexName
                 }
             )
 
@@ -87,41 +125,26 @@ module.exports = generators.Base.extend({
                 this.templatePath('vuex/modules/index.js'),
                 this.destinationPath(this.vuexTarget + '/' + this.viewVuexName + '.js'),
                 {
-                    componentName: this.componentName,
-                    vuexName: this.viewVuexName
+                    viewName: this.viewName,
+                    viewVuexName: this.viewVuexName
                 }
             )
-        },
 
-        updateRouter: function () {
-            var routers = []
-            fs.readdirSync(this.destinationPath(this.viewTarget)).forEach(function (file) {
-                if (fs.statSync(path.normalize(this.destinationPath(this.viewTarget) + '/' + file)).isDirectory()){
-                    var camelName = _.camelCase(file),
-                    router = '{ path: "/' + camelName + '",'
-                            + 'name: "' + camelName + '",'
-                        + 'component: function (resolve) {require(["../views/' + file +'/'+ file +'.vue"], resolve)}}'
-
-                    routers.push(router)
-                }
-            }.bind(this))
-
-            inject(this.destinationPath(this.routerTarget), {
-                code: routers.join(',\n')
-            })
+            this.fs.copy(
+                this.templatePath('components/Index/.gitkeep'),
+                this.destinationPath(this.componentTarget + '/' + this.viewName + '/.gitkeep')
+            )
 
         }
+
     },
 
     conflicts: function () {
 
     },
 
-    install: function () {
-
-    },
-
     end: function () {
-
+        this.updateRouter()
+        this.updateVuex()
     }
 })

@@ -3,15 +3,15 @@
  */
 // import Vue from 'vue'
 // import url from '../../config/url'
-import * as types from '../../views/<%= componentName%>/types'
+import * as types from '../../views/<%= viewName%>/types'
 
 export default {
   state: {
-    <%= vuexName%>State: 'Default State'
+    <%= viewVuexName%>State: 'Default State'
   },
   getters: {
     [types.GETTER_STATE] (state) {
-       return state.<%= vuexName%>State
+       return state.<%= viewVuexName%>State
     }
   },
   mutations: {

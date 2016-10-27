@@ -5,9 +5,9 @@ export default [
   // 登录页面
   {
     path: '/',
-    name: '<%= vuexName%>',
+    name: 'index',
     component: function (resolve) {
-      require(['../views/<%= componentName%>/<%= componentName%>.vue'], resolve)
+      require(['../views/Index/Index.vue'], resolve)
     }
   },
 

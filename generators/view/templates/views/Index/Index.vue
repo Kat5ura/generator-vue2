@@ -1,5 +1,5 @@
 <template>
-    <div id="<%= vuexName%>">
+    <div id="<%= viewVuexName%>">
 
     </div>
 </template>
@@ -12,7 +12,7 @@
     import * as types from './types'
 
     export default {
-        name: '<%= vuexName%>',
+        name: '<%= viewVuexName%>',
         components: {
             // 使用这种方式声明应用的UI组件
             [Field.name]: Field
@@ -29,7 +29,7 @@
             ]),
 
             defaultState () {
-                return this.$store.state.<%= vuexName%>.<%= vuexName%>State
+                return this.$store.state.<%= viewVuexName%>.<%= viewVuexName%>State
             },
             ...mapGetters({
                 defaultState: types.GETTER_STATE
@@ -41,7 +41,7 @@
     }
 </script>
 <style>
-    #<%= vuexName%> {
+    #<%= viewVuexName%> {
 
     }
 </style>

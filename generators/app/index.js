@@ -14,8 +14,6 @@ module.exports = generators.Base.extend({
 
     initializing: function () {
         this.distPath = path.basename(process.cwd())
-        console.log(this.distPath)
-        console.log(this.destinationPath())
         console.log('Ready to create a vue2 project...')
         console.log('By default the project will be generated in current folder, specify a name different from current folder name to generate files under it')
     },
@@ -23,9 +21,14 @@ module.exports = generators.Base.extend({
     prompting: function () {
         return this.prompt([{
             type: 'input',
-            name: 'name',
-            message: 'Please type in the name of your app: ',
+            name: 'root',
+            message: 'Please type in the dir of your app: ',
             default: this.distPath // Default to current folder name
+        },{
+            type: 'input',
+            name: 'name',
+            message: 'Please type in the init viewName of your app: ',
+            default: 'index' // Default to current folder name
         }, {
             type: 'input',
             name: 'description',
@@ -34,10 +37,11 @@ module.exports = generators.Base.extend({
         }]).then(function (answers) {
             var appName = answers.name
 
-            var componentName = _.startCase(appName).replace('\ ', '')
+            var rootName = _.startCase(answers.root).replace('\ ', ''),
+                componentName = _.startCase(appName).replace('\ ', '')
 
             this.componentName = componentName
-            this.dirName = _.snakeCase(this.distPath) ===  _.snakeCase(componentName) ? '' : _.snakeCase(componentName) + '/'
+            this.rootName = _.snakeCase(this.distPath) ===  _.snakeCase(rootName) ? '' : _.snakeCase(rootName) + '/'
             this.vuexName = _.camelCase(componentName)
             this.description = answers.description
 
@@ -61,23 +65,36 @@ module.exports = generators.Base.extend({
                         if (fn == 'views') {
                             this.fs.copyTpl(
                                 this.templatePath('src/views/Index/Index.vue'),
-                                this.destinationPath(this.dirName + 'src/views/' + this.componentName + '/' + this.componentName + '.vue'),
+                                this.destinationPath(this.rootName + 'src/views/' + this.componentName + '/' + this.componentName + '.vue'),
                                 {
                                     vuexName: this.vuexName
                                 }
                             )
 
-                            this.fs.copy(
+                            this.fs.copyTpl(
                                 this.templatePath('src/views/Index/types.js'),
-                                this.destinationPath(this.dirName + 'src/views/' + this.componentName + '/types.js')
+                                this.destinationPath(this.rootName + 'src/views/' + this.componentName + '/types.js'),
+                                {
+                                    vuexName: this.vuexName
+                                }
                             )
-                        } else if(fn == 'vuex'){
+                        }else if (fn == 'components') {
+                            this.fs.copy(
+                                this.templatePath('src/components/common/.gitkeep'),
+                                this.destinationPath(this.rootName + 'src/components/common/.gitkeep')
+                            )
+
+                            this.fs.copy(
+                                this.templatePath('src/components/Index/.gitkeep'),
+                                this.destinationPath(this.rootName + 'src/components/' + this.componentName + '/.gitkeep')
+                            )
+                        }else if(fn == 'vuex'){
                             fs.readdirSync(this.templatePath('src/vuex')).forEach(function (f) {
 
                                 if(f == 'modules'){
                                     this.fs.copyTpl(
                                         this.templatePath('src/vuex/modules/index.js'),
-                                        this.destinationPath(this.dirName + 'src/vuex/modules/' + this.vuexName + '.js'),
+                                        this.destinationPath(this.rootName + 'src/vuex/modules/' + this.vuexName + '.js'),
                                         {
                                             componentName: this.componentName,
                                             vuexName: this.vuexName
@@ -86,7 +103,7 @@ module.exports = generators.Base.extend({
                                 }else {
                                     this.fs.copyTpl(
                                         this.templatePath(fileName + '/' + fn + '/' + f),
-                                        this.destinationPath(this.dirName + fileName + '/' + fn + '/' + f),
+                                        this.destinationPath(this.rootName + fileName + '/' + fn + '/' + f),
                                         {
                                             componentName: this.componentName,
                                             vuexName: this.vuexName
@@ -98,7 +115,7 @@ module.exports = generators.Base.extend({
                         } else {
                             this.fs.copyTpl(
                                 this.templatePath(fileName + '/' + fn),
-                                this.destinationPath(this.dirName + fileName + '/' + fn),
+                                this.destinationPath(this.rootName + fileName + '/' + fn),
                                 {
                                     componentName: this.componentName,
                                     vuexName: this.vuexName
@@ -109,7 +126,7 @@ module.exports = generators.Base.extend({
                 } else if (fileName == 'package.json') {
                     this.fs.copyTpl(
                         this.templatePath(fileName),
-                        this.destinationPath(this.dirName + fileName),
+                        this.destinationPath(this.rootName + fileName),
                         {
                             pluginName: _.snakeCase(this.componentName),
                             description: this.description
@@ -118,16 +135,16 @@ module.exports = generators.Base.extend({
                 } else if (fileName == 'static') {
                     this.fs.copy(
                         this.templatePath(fileName + '/*'),
-                        this.destinationPath(this.dirName + fileName + '/')
+                        this.destinationPath(this.rootName + fileName + '/')
                     )
                     this.fs.copy(
                         this.templatePath(fileName + '/.*'),
-                        this.destinationPath(this.dirName + fileName + '/')
+                        this.destinationPath(this.rootName + fileName + '/')
                     )
                 } else {
                     this.fs.copy(
                         this.templatePath(fileName),
-                        this.destinationPath(this.dirName + fileName)
+                        this.destinationPath(this.rootName + fileName)
                     )
                 }
             }.bind(this))
