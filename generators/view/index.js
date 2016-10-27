@@ -57,7 +57,7 @@ module.exports = generators.Base.extend({
 
     initializing: function () {
         this.distPath = this.destinationPath()
-        this.log('准备创建一个 view:')
+        this.log('Ready to create a view:')
     },
 
     prompting: function () {
@@ -65,14 +65,8 @@ module.exports = generators.Base.extend({
             {
                 type: 'input',
                 name: 'viewName',
-                message: '请指定 view 名(请使用驼峰形式): ',
+                message: 'Specify a view name: ',
                 default: 'defaultView' // Default to current folder name
-            },
-            {
-                type: 'input',
-                name: 'pathName',
-                message: '请指定 path 名(请使用驼峰形式): ',
-                default: 'defaultPath' // Default to current folder name
             }
         ]
 
@@ -81,7 +75,7 @@ module.exports = generators.Base.extend({
             this.viewName = _.startCase(answers.viewName).replace('\ ', '')
             this.viewVuexName = _.camelCase(this.viewName)
 
-            this.pathName = answers.pathName
+            // this.pathName = answers.pathName
             var target = path.normalize('src')
             this.viewTarget = target + '/views'
             this.vuexTarget = target + '/vuex/modules'
