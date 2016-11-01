@@ -15,7 +15,7 @@
     "yeoman-generator": "^0.24.1"
   },
   "files": [
-    "generators",
+    "generators"
   ],
   "author": "Kat5ura@github.com",
   "license": "MIT",
