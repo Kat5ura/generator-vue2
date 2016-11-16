@@ -1,8 +1,7 @@
 {
   "name": "vue2app",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Vue.js project",
-  "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
     "build": "node build/build.js",
