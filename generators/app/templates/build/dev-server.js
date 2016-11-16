@@ -60,7 +60,7 @@ function devServe(customConfig) {
   var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
   app.use(staticPath, express.static('./static'))
 
-  app.listen(port, function (err) {
+  return app.listen(port, function (err) {
     if (err) {
       console.log(err)
       return
@@ -73,7 +73,6 @@ function devServe(customConfig) {
       opn(uri)
     }
 
-    return app
   })
 }
 
