@@ -9,8 +9,8 @@ export default [
     component: function (resolve) {
       require(['../views/Index/Index.vue'], resolve)
     }
-  },
-
+  }
+  /* eslint-disable */
   /* inject start */
 
   /* inject end */

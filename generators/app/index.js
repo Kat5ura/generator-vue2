@@ -24,18 +24,13 @@ module.exports = generators.Base.extend({
             name: 'root',
             message: 'Please type in the dir of your app: ',
             default: this.distPath // Default to current folder name
-        },{
-            type: 'input',
-            name: 'name',
-            message: 'Please type in the init viewName of your app: ',
-            default: 'index' // Default to current folder name
         }, {
             type: 'input',
             name: 'description',
             message: 'Description: ',
             default: 'This is a vue2 app.' // Default to current folder name
         }]).then(function (answers) {
-            var appName = answers.name
+            var appName = 'index'
 
             var rootName = _.startCase(answers.root).replace('\ ', ''),
                 componentName = _.startCase(appName).replace('\ ', '')

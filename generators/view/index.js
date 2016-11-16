@@ -12,13 +12,13 @@ module.exports = generators.Base.extend({
         // Calling the super constructor is important so our generator is correctly set up
         generators.Base.apply(this, arguments)
         this.updateRouter = function () {
-            var routers = []
+            var routers = [,]
             fs.readdirSync(this.destinationPath(this.viewTarget)).forEach(function (file) {
-                if (fs.statSync(path.normalize(this.destinationPath(this.viewTarget) + '/' + file)).isDirectory()){
+                if (fs.statSync(path.normalize(this.destinationPath(this.viewTarget) + '/' + file)).isDirectory() && file !== 'Index'){
                     var camelName = _.camelCase(file),
-                        router = '{ path: "/' + camelName + '",'
-                            + 'name: "' + camelName + '",'
-                            + 'component: function (resolve) {require(["../views/' + file +'/'+ file +'.vue"], resolve)}}'
+                        router = "{ path: '/" + camelName + "',"
+                            + "name: '" + camelName + "',"
+                            + "component: function (resolve) {require(['../views/" + file +"/"+ file +".vue'], resolve)}}"
 
                     routers.push(router)
                 }
@@ -36,7 +36,7 @@ module.exports = generators.Base.extend({
                 if (fs.statSync(path.normalize(this.destinationPath(this.viewTarget) + '/' + file)).isDirectory()){
                     var camelName = _.camelCase(file),
                         module = camelName + ': ' + file,
-                        importor = 'import ' + file + ' from "./modules/'+ camelName +'"'
+                        importor = "import " + file + " from './modules/"+ camelName +"'"
 
                     modules.push(module)
                     importors.push(importor)
