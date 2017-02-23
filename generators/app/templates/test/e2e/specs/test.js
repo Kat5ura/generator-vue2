@@ -1,4 +1,4 @@
- // For authoring Nightwatch tests, see
+// For authoring Nightwatch tests, see
 // http://nightwatchjs.org/guide#usage
 
 module.exports = {
@@ -10,9 +10,10 @@ module.exports = {
 
     browser
       .url(devServer)
-      .waitForElementVisible('#main', 5000)
-      .assert.elementPresent('#main')
-      .assert.containsText('h1', '登录')
+      .waitForElementVisible('#app', 5000)
+      .assert.elementPresent('.hello')
+      .assert.containsText('h1', 'Welcome to Your Vue.js App')
+      .assert.elementCount('img', 1)
       .end()
   }
 }
