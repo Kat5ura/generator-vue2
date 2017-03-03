@@ -54,6 +54,10 @@ module.exports = generators.Base.extend({
     writing: {
 
         generate: function () {
+            if(this.rootName){
+	            this.destinationRoot(this.rootName)
+            }
+
             fs.readdirSync(this.templatePath()).forEach(function (fileName) {
                 if (fileName == 'src') {
                     fs.readdirSync(this.templatePath(fileName)).forEach(function (fn) {
@@ -151,7 +155,7 @@ module.exports = generators.Base.extend({
     },
 
     install: function () {
-        this.npmInstall()
+
     },
 
     end: function () {
