@@ -155,10 +155,10 @@ module.exports = generators.Base.extend({
     },
 
     install: function () {
-	    console.log('\n\n\n\n\n\ninstall dependencies:')
+	    console.log('\n\n\ninstall dependencies:')
 	    console.log(this.rootName ? '$ cd ./' : '$ cd ' + this.rootName + '&& npm install')
 	    console.log('run the app:')
-	    console.log('$ npm run dev')
+	    console.log('$ npm run dev\n\n\n')
     },
 
     end: function () {
