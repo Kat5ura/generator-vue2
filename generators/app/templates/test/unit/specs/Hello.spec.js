@@ -1,11 +1,11 @@
 import Vue from 'vue'
-import Hello from 'src/components/Hello'
+import App from 'src/App'
 
-describe('Hello.vue', () => {
+describe('App.vue', () => {
   it('should render correct contents', () => {
-    const Constructor = Vue.extend(Hello)
+    const Constructor = Vue.extend(App)
     const vm = new Constructor().$mount()
-    expect(vm.$el.querySelector('.hello h1').textContent)
-      .to.equal('Welcome to Your Vue.js App')
+    expect(vm.$el.querySelector('#main h1').textContent)
+      .to.equal('登录')
   })
 })
