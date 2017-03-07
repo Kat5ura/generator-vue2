@@ -23,16 +23,16 @@ Now you`ve got a new seed project!
 You can add a new view with
 
 ```shell
-yo vue2:view [viewName]
+yo vue2:view
 ```
-Then you have a folder under **views** folder, named with \[viewName\], and there you can also get other related things, like component folder, vuex moudle folder.
+Then you have a folder under **views** folder, named with \[specifiedViewName\], and there you can also get other related things, like component folder, vuex moudle folder.
 Besides, the route config has already been generated, without manual operation. 
 
 ---
 
 You can also get a component with
 ```shell
-yo vue2:component [componentName]
+yo vue2:component
 ```
 
 And you need to specify a folder where you want to place your new component.
