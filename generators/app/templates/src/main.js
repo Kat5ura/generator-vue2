@@ -17,7 +17,7 @@ Vue.config.productionTip = false
 // 实例化Vue的filter
 Object.keys(filters).forEach(k => Vue.filter(k, filters[k]))
 
-initMock()
+process.env.NODE_ENV === 'development' && initMock()
 
 Vue.use(Resource)
 initResource(Vue)
